@@ -190,8 +190,7 @@ public class Spider {
 			String content =crawlPageContent(httpClient,url);  
 			
 		    writeToFile(content,filepath + page +".html");
-		    String afterJsoup = new String();
-		    Document dd = Jsoup.parse(content, afterJsoup);
+		    Document dd = Jsoup.parse(content);
 		    System.out.println(dd.title());
 		    Elements links = dd.getElementsByTag("h3");
 		    if (links == null || links.isEmpty()){
@@ -225,7 +224,7 @@ public class Spider {
 	    return resultList;
 	}
 	
-	public static void getBodyText(String url){
+	public static String getBodyText(String url){
 		String content = crawlPageContent(httpClient, url);
 		Document dd = Jsoup.parse(content);
 		StringBuilder sb = new StringBuilder();
@@ -236,8 +235,7 @@ public class Spider {
 	    	sb.append(str);
 	    }
 		String bodyText = sb.toString();
-		
-		writeToFile(bodyText, "/home/zhaoiwei/spider/body.txt");
+		return bodyText;
 	}
 	
 	public static void main(String[] args) {
@@ -257,7 +255,12 @@ public class Spider {
 		    	printResultLinkList(list);
 		    	String content = crawlPageContent(httpClient,list.get(0).getUrl());
 		    	writeToFile(content, "/home/zhaoiwei/spider/out.html");
-		    	getBodyText(list.get(0).getUrl());
+		    	String bodyText = getBodyText(list.get(0).getUrl());
+				writeToFile(bodyText, "/home/zhaoiwei/spider/body1.txt");
+				ExtractText extract = new ExtractText();
+				String text = extract.parseUrl(Jsoup.parse(content));
+				writeToFile(text, "/home/zhaoiwei/spider/body2.txt");
+		    	
 			} catch (SearchResultException e) {
 				e.printStackTrace();
 			}
