@@ -38,7 +38,7 @@ public class ExtractText {
         		LC=(double)linkcount/(double)contentcount;
         		if(LC<0.03)
         		{
-        			 text=candidate.text();
+        			 text += candidate.text();
         		}
         	}
         } 

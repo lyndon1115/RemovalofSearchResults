@@ -94,12 +94,18 @@ public class Spider {
 	 * @param url 
 	 * @return 
 	 */  
+	
+	public static String crawlPageContent(String url){
+		return crawlPageContent(httpClient,url);
+	}
+	
 	public static String crawlPageContent(HttpClient httpClient, String url){  
 	    HttpGet httpGet = new HttpGet();  
 	    InputStream inputStream = null;  
 	    try {  
 	        initHeader(httpGet,url);  
-	        HttpResponse response = httpClient.execute(httpGet);  
+	        HttpResponse response = httpClient.execute(httpGet); 
+	        System.out.println("Content-Encoding:" + response.getHeaders("Content-Encoding"));
 	        HttpEntity entity = response.getEntity();  
 	        String encode = getEncoding(url);  
 	         if(encode.equals("windows-1252")){  
@@ -147,7 +153,7 @@ public class Spider {
 	    } catch (MalformedURLException e1) {  
 	        e1.printStackTrace();  
 	    } catch (IOException e1) {  
-	        e1.printStackTrace();  
+	        //e1.printStackTrace();  
 	    }  
 	    if (charset == null) {  
 	        return "utf-8";  
@@ -255,11 +261,11 @@ public class Spider {
 		    	printResultLinkList(list);
 		    	String content = crawlPageContent(httpClient,list.get(0).getUrl());
 		    	writeToFile(content, "/home/zhaoiwei/spider/out.html");
-		    	String bodyText = getBodyText(list.get(0).getUrl());
-				writeToFile(bodyText, "/home/zhaoiwei/spider/body1.txt");
+//		    	String bodyText = getBodyText(list.get(0).getUrl());
+//				writeToFile(bodyText, "/home/zhaoiwei/spider/body1.txt");
 				ExtractText extract = new ExtractText();
 				String text = extract.parseUrl(Jsoup.parse(content));
-				writeToFile(text, "/home/zhaoiwei/spider/body2.txt");
+				writeToFile(text, "/home/zhaoiwei/spider/body.txt");
 		    	
 			} catch (SearchResultException e) {
 				e.printStackTrace();
