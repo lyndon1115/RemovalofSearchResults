@@ -2,8 +2,10 @@ package zhaoiwei.removealsearchresults;
 
 public class SearchResult {
 
-	private String url;
-	private String text;
+	private final String url;
+	private final String text;
+
+	
 	public SearchResult(String url,String text){
 		this.url = url;
 		this.text = text;
@@ -11,14 +13,9 @@ public class SearchResult {
 	public String getUrl() {
 		return url;
 	}
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	public String getText() {
+	public String getText(){
 		return text;
 	}
-	public void setText(String text) {
-		this.text = text;
-	}
+	
 	
 }

@@ -11,7 +11,6 @@ public class TextExtract {
 	private final static int blocksWidth;
 	private static int threshold;
 	private static String html;
-	private static boolean flag;
 	private static int start;
 	private static int end;
 	private static StringBuilder text;
@@ -22,7 +21,6 @@ public class TextExtract {
 		indexDistribution = new ArrayList<Integer>();
 		text = new StringBuilder();
 		blocksWidth = 3;
-		flag = false;
 		threshold	= 86;   
 	}
 	
@@ -35,7 +33,6 @@ public class TextExtract {
 	}
 	
 	public static String parse(String _html, boolean _flag) {
-		flag = _flag;
 		html = _html;
 		preProcess();
 //		System.out.println(html);
@@ -90,13 +87,13 @@ public class TextExtract {
 			StringBuilder tmp = new StringBuilder();
 			if (boolend) {
 				//System.out.println(start+1 + "\t\t" + end+1);
-				for (int ii = start; ii <= end; ii++) {
+				for (int ii = start; ii < end; ii++) {
 					if (lines.get(ii).length() < 5) continue;
 					tmp.append(lines.get(ii) + "\n");
 				}
 				String str = tmp.toString();
 				//System.out.println(str);
-				if (str.contains("Copyright")  || str.contains("��Ȩ����") ) continue; 
+				if (str.contains("Copyright")  || str.contains("版权所有") ) continue; 
 				text.append(str);
 				boolstart = boolend = false;
 			}

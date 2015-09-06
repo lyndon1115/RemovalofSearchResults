@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/home/zhaoiwei/software/ExtendsJAR/crawWebjar/httpclient-4.2.5.jar"/>
 	<classpathentry kind="lib" path="/home/zhaoiwei/software/ExtendsJAR/crawWebjar/httpcore-4.2.4.jar"/>
 	<classpathentry kind="lib" path="/home/zhaoiwei/software/ExtendsJAR/crawWebjar/jsoup-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/zhaoiwei/software/ExtendsJAR/IK-Analyzer-2012FF/dist/IKAnalyzer2012_FF.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
