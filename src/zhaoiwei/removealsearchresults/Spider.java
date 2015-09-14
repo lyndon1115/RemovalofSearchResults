@@ -17,12 +17,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Spider {
+	
+	static class DuplicateInfo{
+		String title1,title2;
+		public DuplicateInfo(String t1,String t2){
+			title1 = t1;
+			title2 = t2;
+		}
+	}
+	public static List<DuplicateInfo> duplicateInfo = new ArrayList<DuplicateInfo>();
 	public static List<SearchResult> urlList;
 	public static LinkedBlockingQueue<WebTextResult> textBlockingQueue = new LinkedBlockingQueue<WebTextResult>();
 	final private static String URL= "http://www.baidu.com/s?wd=";  
     public final static int NUMBER_RETRY = 16;
     public final static int GETWEBTEXT_THREADNUMBER = 20;
-    public final static double SIMILARITY_THRESHOLD = 0.55;
+    public final static double SIMILARITY_THRESHOLD = 0.7;
     public static int searchNum = 10;
 	public AtomicInteger removalNumber = new AtomicInteger(0);
 	
@@ -45,6 +54,7 @@ public class Spider {
 					text2 = list.get(j);
 					similarityRatio = ComputeSimilarity.computeSimilarity(text1.getBodyText(), text2.getBodyText());
 					if (similarityRatio > SIMILARITY_THRESHOLD){
+						duplicateInfo.add(new DuplicateInfo(text1.getSearchResult().getText(),text2.getSearchResult().getText()));
 						list.set(j,null);
 					}
 				}
@@ -91,6 +101,7 @@ public class Spider {
 				text2 = list2.get(j);
 				similarityRatio = ComputeSimilarity.computeSimilarity(text1.getBodyText(), text2.getBodyText());
 				if (similarityRatio > SIMILARITY_THRESHOLD){
+					duplicateInfo.add(new DuplicateInfo(text1.getSearchResult().getText(),text2.getSearchResult().getText()));
 					list2.set(j,null);
 				}
 			}
@@ -198,7 +209,7 @@ public class Spider {
 				content =DownloadWebPage.crawlPageContent(url,uri);
 			}
 			
-		    //writeToFile(content,filepath + page +".html");
+		    writeToFile(content,filepath + page +".html");
 		    Document dd = Jsoup.parse(content);
 		    //System.out.println(dd.title());
 		    Elements links = dd.getElementsByTag("h3");
@@ -216,7 +227,6 @@ public class Spider {
 		    for (Element link : links) { 
 		    	linkHref = link.getElementsByTag("a").attr("href");//百度搜索结果链接
 		    	linkText = link.text();		    	//百度搜索结果链接对应的文字
-		    	//System.out.println(linkHref + "\n" +linkText);
 		    	urlList.add(new SearchResult(linkHref,linkText));
 		    	numResult++;
 		    	if (numResult >= num)
@@ -261,6 +271,12 @@ public class Spider {
 		    	for (int i = 0; i < removalResult.size(); ++i){
 		    		System.out.println(i + " : " +removalResult.get(i).getSearchResult().getText());
 		    		System.out.println(removalResult.get(i).getSearchResult().getUrl());
+		    		System.out.println();
+		    	}
+		    	System.out.println("重复的搜索结果");
+		    	for (DuplicateInfo t : duplicateInfo){
+		    		System.out.println(t.title1);
+		    		System.out.println(t.title2);
 		    		System.out.println();
 		    	}
 			} catch (SearchResultException e) {
